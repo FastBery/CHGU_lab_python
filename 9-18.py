@@ -35,10 +35,10 @@ class Diary:
             self.note.append(note)
 
     def __getitem__(self, n):
-        if not isinstance(key, int):
+        if not isinstance(n, int):
             raise TypeError("Index must be integer")
-        if 0 <= key <= len(self.array):
-            return self.note[key]
+        if 0 <= n <= len(self.array):
+            return self.note[n]
         else:
             raise IndexError("Wrong index")
 
