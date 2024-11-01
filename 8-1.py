@@ -10,10 +10,6 @@ class Mass:
         elif type(array) == Mass:
             self = array
 
-    @classmethod
-    def forclass(cls, ):
-        return cls(n)
-
     def __getitem__(self, key):
         if not isinstance(key, int):
             raise TypeError("Index must be integer")
@@ -25,19 +21,35 @@ class Mass:
     def __str__(self):
         return str(self.array)
 
-    def __add__(self, other):
+    def append(self, other):
         for x in other.array:
             self.array.append(x)
 
-    
-
+    def __add__(self, other):
+        for x in other.array:
+            self.array.append(x)
+        return self
+        
+    def merge(self, other):
+        dict = {}
+        for x in self.array:
+            dict[x] = 1
+        for x in other.array:
+            dict[x] = 1
+        self.array = list(dict.keys())
+        return self
 
 
 array = Mass(['s', 'a', 'd','v'])
-array2 = array
-array3 = array + array2
+print(array)
+print(array[2])
+array2 = Mass(['n','b', 's', 'a'])
+array3 = array2 + array
+print(array3)
+# array3 = array + array2
 
-print(array2)
+print(array.merge(array2))
+print(array)
 
 # a1 = [1,2,3]
 # a2 = [4,5,6]
