@@ -18,8 +18,8 @@ root = Tk()
 root.title('12 lab (18)')
 
 # Making window and editing size
-window_width = 300
-window_height = 400
+window_width = 400
+window_height = 500
 
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -37,7 +37,7 @@ root.rowconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
 
 #Importing image and anchoring it to label, showing in window
-img = PhotoImage(file='./function.png')
+img = PhotoImage(file='./12_lab/function.png')
 image_label = Label(root, image=img, anchor=N)
 
 lbl_main = Label(root, text="Enter value for X variable:", font=20, bg='green')
@@ -46,8 +46,8 @@ lbl_x = Label(root, text='X:', font=20)
 ent_x = Entry(root)
 
 image_label.grid(column=0 , row=0, padx=5, pady=5, sticky=N, columnspan=2)
-lbl_x.grid(column=0, row=1, padx=15, pady=5, sticky=NW)
-ent_x.grid(column=1, row=1, padx=15, pady=5, sticky=NE)
+lbl_x.grid(column=0, row=1, padx=15, pady=5, sticky=NE)
+ent_x.grid(column=1, row=1, padx=15, pady=5, sticky=NW)
 
 
 bt = Button(root, text="Calculate", command=event)
