@@ -1,5 +1,7 @@
 from tkinter import *
 import math as m
+import pathlib as pl
+import inspect
 
 def event():
     x = int(ent_x.get())
@@ -37,7 +39,9 @@ root.rowconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
 
 #Importing image and anchoring it to label, showing in window
-img = PhotoImage(file='./12_lab/function.png')
+file_name = pl.Path(inspect.getfile(lambda: None)).parent/'function.png'
+print(file_name)
+img = PhotoImage(file=file_name)
 image_label = Label(root, image=img, anchor=N)
 
 lbl_main = Label(root, text="Enter value for X variable:", font=20, bg='green')
