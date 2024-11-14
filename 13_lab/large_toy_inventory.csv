@@ -1,4 +1,4 @@
-SKU,Toy Name,Price,Quantity,Age Range,Manufacturer
+SKU,Toy_Name,Price,Quantity,Age_Range,Manufacturer
 101,Lego Set,95.99,73,7-14,SplashToys
 102,Lego Set,12.42,16,5-10,Lego
 103,Teddy Bear,28.13,25,7-14,FunGames

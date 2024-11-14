@@ -16,7 +16,7 @@ n = 0
 for i in cur.execute('SELECT * FROM Toys WHERE Manufacturer=\'Lego\''):
     n += 1
     print(i)
-    if n == 10:
+    if n == 1000:
         break
 
 
