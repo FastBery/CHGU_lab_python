@@ -3,4 +3,4 @@
 
 You can contribute this repository independent from nationality, country and race.
 
-For Russians only)
+For Russians only) (Linux practice)
