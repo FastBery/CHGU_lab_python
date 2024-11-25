@@ -1,0 +1,11 @@
+id,project_id,employee_id,description
+1,1,1,Developingthemainpage
+2,1,2,Settinguptheserver
+3,2,3,DevelopingtheAPI
+4,3,4,Testingtheinterface
+5,4,5,Preparinganadvertisingstrategy
+6,5,6,Creatinggraphics
+7,6,7,Analyzingdata
+8,7,8,Creatingareport
+9,8,9,Writingscripts
+10,9,10,Addingsearchfunctions
