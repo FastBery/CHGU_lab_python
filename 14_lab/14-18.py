@@ -4,8 +4,8 @@ from tkinter import *
 
 def insert_to_db(table_name, x, y, z, a = None):
     db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
     if table_name != 'Tasks':
-        cursor = db.cursor()
         if table_name == 'Projects':
             cur.execute(f'INSERT INTO {table_name} (id, name, status) VALUES (?, ?, ?)', (x, y, z)) 
         elif table_name == 'Employees':
@@ -13,6 +13,39 @@ def insert_to_db(table_name, x, y, z, a = None):
     else:
         cur.execute(f'INSERT INTO {table_name} (id, project_id, employee_id, description) VALUES (?, ?, ?, ?)', (x, y, z, a))
     db.commit()
+    db.close()
+
+def search_tasks_for_employees(name, last_name):
+    db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
+    cur.execute(f''' SELECT Tasks.id, Tasks.description, Projects.name
+    FROM Tasks
+    INNER JOIN Employees ON Tasks.employee_id = Employees.id
+    INNER JOIN Projects ON Tasks.project_id = Projects.id
+    WHERE Employees.name = (?) AND Employees.last_name = (?) ''', (name, last_name))
+    result = list(cur.fetchall())
+    db.close()
+    return result
+
+def tasks_amount_for_project():
+    db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
+    cur.execute(''' SELECT Projects.name, COUNT(Tasks.id) AS number_of_tasks
+    FROM Tasks
+    INNER JOIN Projects ON Tasks.project_id = Projects.id
+    GROUP BY Projects.name ''')
+    result = list(cur.fetchall())
+    db.close()
+    return result
+
+def get_project_list():
+    db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
+    cur.execute(''' SELECT name, status
+    FROM Projects''')
+    result = list(cur.fetchall())
+    return result
+
 
 
 db = sq.connect('./14_lab/data_base/14.db')
@@ -103,20 +136,22 @@ print('--------------')
 #Tasks for lab
 print("tasks")
 
-cur.execute(''' SELECT Tasks.id, Tasks.description, Projects.name
-FROM Tasks
-INNER JOIN Employees ON Tasks.employee_id = Employees.id
-INNER JOIN Projects ON Tasks.project_id = Projects.id
-WHERE Employees.name = 'Olga' AND Employees.last_name = 'Smirnova' ''')
-for i in cur.fetchall():
+# cur.execute(''' SELECT Tasks.id, Tasks.description, Projects.name
+# FROM Tasks
+# INNER JOIN Employees ON Tasks.employee_id = Employees.id
+# INNER JOIN Projects ON Tasks.project_id = Projects.id
+# WHERE Employees.name = 'Olga' AND Employees.last_name = 'Smirnova' ''')
+
+data = search_tasks_for_employees('Olga', 'Smirnova')
+for i in data:
     print(i)
 print('--------------')
 
-cur.execute(''' SELECT Projects.name, COUNT(Tasks.id) AS number_of_tasks
-FROM Tasks
-INNER JOIN Projects ON Tasks.project_id = Projects.id
-GROUP BY Projects.name ''')
-for i in cur.fetchall():
+# cur.execute(''' SELECT Projects.name, COUNT(Tasks.id) AS number_of_tasks
+# FROM Tasks
+# INNER JOIN Projects ON Tasks.project_id = Projects.id
+# GROUP BY Projects.name ''')
+for i in get_project_list():
     print(i)
 print('--------------')
 
@@ -137,24 +172,24 @@ print('--------------')
 # print(cur.fetchall())
 # print('--------------')
 
-insert_to_db('Projects', 11, 'Armagedon', 'process')
+# insert_to_db('Projects', 11, 'Armagedon', 'process')
 
-cur.execute('SELECT * FROM Projects')
-for i in cur.fetchall():
-    print(i)
-print('--------------')
+# cur.execute('SELECT * FROM Projects')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
 
-insert_to_db('Employees', 11, 'Kura', 'Kur')
-cur.execute('SELECT * FROM Employees')
-for i in cur.fetchall():
-    print(i)
-print('--------------')
+# insert_to_db('Employees', 11, 'Kura', 'Kur')
+# cur.execute('SELECT * FROM Employees')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
 
-insert_to_db('Tasks', 11, 11, 11, 'WTF')
-cur.execute('SELECT * FROM Tasks')
-for i in cur.fetchall():
-    print(i)
-print('--------------')
+# insert_to_db('Tasks', 11, 11, 11, 'WTF')
+# cur.execute('SELECT * FROM Tasks')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
 
 db.close()
 
