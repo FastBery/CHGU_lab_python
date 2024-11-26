@@ -1,5 +1,18 @@
 import sqlite3 as sq
 import csv
+from tkinter import *
+
+def insert_to_db(table_name, x, y, z, a = None):
+    db = sq.connect('./14_lab/data_base/14.db')
+    if table_name != 'Tasks':
+        cursor = db.cursor()
+        if table_name == 'Projects':
+            cur.execute(f'INSERT INTO {table_name} (id, name, status) VALUES (?, ?, ?)', (x, y, z)) 
+        elif table_name == 'Employees':
+            cur.execute(f'INSERT INTO {table_name} (id, name, last_name) VALUES (?, ?, ?)', (x, y, z))
+    else:
+        cur.execute(f'INSERT INTO {table_name} (id, project_id, employee_id, description) VALUES (?, ?, ?, ?)', (x, y, z, a))
+    db.commit()
 
 
 db = sq.connect('./14_lab/data_base/14.db')
@@ -87,7 +100,7 @@ for i in cur.fetchall():
     print(i)
 print('--------------')
 
-
+#Tasks for lab
 print("tasks")
 
 cur.execute(''' SELECT Tasks.id, Tasks.description, Projects.name
@@ -124,5 +137,42 @@ print('--------------')
 # print(cur.fetchall())
 # print('--------------')
 
+insert_to_db('Projects', 11, 'Armagedon', 'process')
+
+cur.execute('SELECT * FROM Projects')
+for i in cur.fetchall():
+    print(i)
+print('--------------')
+
+insert_to_db('Employees', 11, 'Kura', 'Kur')
+cur.execute('SELECT * FROM Employees')
+for i in cur.fetchall():
+    print(i)
+print('--------------')
+
+insert_to_db('Tasks', 11, 11, 11, 'WTF')
+cur.execute('SELECT * FROM Tasks')
+for i in cur.fetchall():
+    print(i)
+print('--------------')
 
 db.close()
+
+# #Making window
+# root = Tk()
+# root.title('12 lab (18)')
+
+# #Configuring window size
+# window_width = 400
+# window_height = 500
+
+# screen_width = root.winfo_screenwidth()
+# screen_height = root.winfo_screenheight()
+
+# center_x = int(screen_width/2 - window_width / 2)
+# center_y = int(screen_height/2 - window_height / 2)
+
+# root.geometry(f'{window_width}x{window_height}+{center_x}+{center_y}')
+# root.resizable(True, True)
+
+# root.mainloop()
