@@ -49,6 +49,16 @@ def get_project_list():
     return result
 
 
+def insert_tkinter():
+    x = ent_id_1.get()
+    y = ent_id_2.get()
+    z = ent_id_3.get()
+    insert_to_db(x, y, z)
+    ent_id_1.delete(0, END)
+    ent_id_2.delete(0, END)
+    ent_id_3.delete(0, END)
+
+
 #data base begin
 db = sq.connect('./14_lab/data_base/14.db')
 cur = db.cursor()
@@ -120,84 +130,6 @@ except sq.IntegrityError:
 db.commit()
 
 
-#checking if everything works
-
-# cur.execute('SELECT * FROM Projects')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-# cur.execute('SELECT * FROM Employees')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-# cur.execute('SELECT * FROM Tasks')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-
-        #Tasks for lab
-        # print("tasks")
-
-        # cur.execute(''' SELECT Tasks.id, Tasks.description, Projects.name
-        # FROM Tasks
-        # INNER JOIN Employees ON Tasks.employee_id = Employees.id
-        # INNER JOIN Projects ON Tasks.project_id = Projects.id
-        # WHERE Employees.name = 'Olga' AND Employees.last_name = 'Smirnova' ''')
-
-        # data = search_tasks_for_employees('Olga', 'Smirnova')
-        # for i in data:
-        #     print(i)
-        # print('--------------')
-
-        # cur.execute(''' SELECT Projects.name, COUNT(Tasks.id) AS number_of_tasks
-        # FROM Tasks
-        # INNER JOIN Projects ON Tasks.project_id = Projects.id
-        # GROUP BY Projects.name ''')
-        # for i in get_project_list():
-        #     print(i)
-        # print('--------------')
-
-
-#checking delete function
-# cur.execute('DELETE FROM Projects WHERE status=\'Completed\'')
-# db.commit()
-
-# cur.execute('SELECT * FROM Projects')
-# print(cur.fetchall())
-# print('--------------')
-
-# cur.execute('SELECT * FROM Employees')
-# print(cur.fetchall())
-# print('--------------')
-
-# cur.execute('SELECT * FROM Tasks')
-# print(cur.fetchall())
-# print('--------------')
-
-
-# insert_to_db('Projects', 'Armagedon', 'process')
-
-# cur.execute('SELECT * FROM Projects')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-# insert_to_db('Employees', 'Kura', 'Kur')
-# cur.execute('SELECT * FROM Employees')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-# insert_to_db('Tasks', 11, 11, 'WTF')
-# cur.execute('SELECT * FROM Tasks')
-# for i in cur.fetchall():
-#     print(i)
-# print('--------------')
-
-
 #Making window
 root = Tk()
 root.title('12 lab (18)')
@@ -220,11 +152,11 @@ root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=1)
 root.columnconfigure(3, weight=1)
 
-def insert_tkinter():
-    x = ent_id_1.get()
-    y = ent_id_2.get()
-    z = ent_id_3.get()
-    insert_to_db(x, y, z)
+# def insert_tkinter():
+#     x = ent_id_1.get()
+#     y = ent_id_2.get()
+#     z = ent_id_3.get()
+#     insert_to_db(x, y, z)
 
 Label(root, text='Table').grid(row=0)
 Label(root, text='Name:').grid(row=1)

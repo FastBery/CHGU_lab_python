@@ -1,0 +1,76 @@
+#checking if everything works
+
+# cur.execute('SELECT * FROM Projects')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
+
+# cur.execute('SELECT * FROM Employees')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
+
+# cur.execute('SELECT * FROM Tasks')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
+
+
+        #Tasks for lab
+        # print("tasks")
+
+        # cur.execute(''' SELECT Tasks.id, Tasks.description, Projects.name
+        # FROM Tasks
+        # INNER JOIN Employees ON Tasks.employee_id = Employees.id
+        # INNER JOIN Projects ON Tasks.project_id = Projects.id
+        # WHERE Employees.name = 'Olga' AND Employees.last_name = 'Smirnova' ''')
+
+        # data = search_tasks_for_employees('Olga', 'Smirnova')
+        # for i in data:
+        #     print(i)
+        # print('--------------')
+
+        # cur.execute(''' SELECT Projects.name, COUNT(Tasks.id) AS number_of_tasks
+        # FROM Tasks
+        # INNER JOIN Projects ON Tasks.project_id = Projects.id
+        # GROUP BY Projects.name ''')
+        # for i in get_project_list():
+        #     print(i)
+        # print('--------------')
+
+
+#checking delete function
+# cur.execute('DELETE FROM Projects WHERE status=\'Completed\'')
+# db.commit()
+
+# cur.execute('SELECT * FROM Projects')
+# print(cur.fetchall())
+# print('--------------')
+
+# cur.execute('SELECT * FROM Employees')
+# print(cur.fetchall())
+# print('--------------')
+
+# cur.execute('SELECT * FROM Tasks')
+# print(cur.fetchall())
+# print('--------------')
+
+
+# insert_to_db('Projects', 'Armagedon', 'process')
+
+# cur.execute('SELECT * FROM Projects')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
+
+# insert_to_db('Employees', 'Kura', 'Kur')
+# cur.execute('SELECT * FROM Employees')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
+
+# insert_to_db('Tasks', 11, 11, 'WTF')
+# cur.execute('SELECT * FROM Tasks')
+# for i in cur.fetchall():
+#     print(i)
+# print('--------------')
