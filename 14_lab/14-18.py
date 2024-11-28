@@ -48,16 +48,49 @@ def get_project_list():
     result = list(cur.fetchall())
     return result
 
+def select_for_table(table_name):
+    db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
+    cur.execute(f'SELECT * FROM {table_name}')
+    result = cur.fetchall()
+    return result
 
+
+#insert function for tkinter GUI
 def insert_tkinter():
     x = ent_id_1.get()
+    if not x in ('Projects', 'Tasks', 'Employees'):
+        error = Label(frame_insert, text="No such table")
+        error.grid(row=2, column=2)
+        root.after(1500, lambda: error.destroy())
+        return
     y = ent_id_2.get()
     z = ent_id_3.get()
     insert_to_db(x, y, z)
     ent_id_1.delete(0, END)
     ent_id_2.delete(0, END)
     ent_id_3.delete(0, END)
+    done = Label(frame_insert, text="Done")
+    done.grid(row=2, column=2)
+    root.after(1500, lambda: done.destroy())
 
+
+#get data from table
+def get_data_from_table():
+    table_name = ent_table_group.get()
+    ent_table_group.delete(0, END)
+    if not table_name in ('Projects', 'Tasks', 'Employees'):
+        error = Label(frame_insert, text="No such table")
+        error.grid(row=1, column=2)
+        root.after(1500, lambda: error.destroy())
+        return
+    with open(f'./data_from_table_{table_name}', 'w') as file:
+        data = select_for_table(table_name)
+        for i in data:
+            file.write(str(i))
+        done = Label(frame_group_tasks, text="Done")
+        done.grid(row=2, column=2)
+        root.after(1500, lambda: done.destroy())
 
 #data base begin
 db = sq.connect('./14_lab/data_base/14.db')
@@ -132,7 +165,8 @@ db.commit()
 
 #Making window
 root = Tk()
-root.title('12 lab (18)')
+root.title('14 lab (18)')
+
 
 #Configuring window size
 window_width = 400
@@ -152,29 +186,38 @@ root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=1)
 root.columnconfigure(3, weight=1)
 
-# def insert_tkinter():
-#     x = ent_id_1.get()
-#     y = ent_id_2.get()
-#     z = ent_id_3.get()
-#     insert_to_db(x, y, z)
 
-Label(root, text='Table').grid(row=0)
-Label(root, text='Name:').grid(row=1)
-Label(root, text='Status:').grid(row=2)
+#Insert 
+frame_insert = Frame(root)
+frame_insert.pack(padx=20, pady=20)
 
-ent_id_1 = Entry(root)
+Label(frame_insert, text='Table').grid(row=0)
+Label(frame_insert, text='Name:').grid(row=1)
+Label(frame_insert, text='Status:').grid(row=2)
+
+ent_id_1 = Entry(frame_insert)
 ent_id_1.grid(row=0, column=1)
 
-ent_id_2 = Entry(root)
+ent_id_2 = Entry(frame_insert)
 ent_id_2.grid(row=1, column=1)
 
-ent_id_3 = Entry(root)
+ent_id_3 = Entry(frame_insert)
 ent_id_3.grid(row=2, column=1)
 
-Button(root, text='insert to db', command=insert_tkinter).grid(row=1, column=2)
+Button(frame_insert, text='insert to db', command=insert_tkinter).grid(row=1, column=2)
 
-for i in get_project_list():
-    print(i)
+
+frame_group_tasks = Frame(root)
+frame_group_tasks.pack(padx=20, pady=20)
+
+Label(frame_group_tasks, text='Table').grid(row=0)
+
+ent_table_group = Entry(frame_group_tasks)
+ent_table_group.grid(row=0, column=1)
+
+Button(frame_group_tasks, text="Click herer to get tasks", command=get_data_from_table).grid(row=0, column=2)
+
+
 
 root.mainloop()
 db.close()
