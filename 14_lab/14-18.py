@@ -53,6 +53,7 @@ def select_for_table(table_name):
     cur = db.cursor()
     cur.execute(f'SELECT * FROM {table_name}')
     result = cur.fetchall()
+    db.close()
     return result
 
 
@@ -80,14 +81,13 @@ def get_data_from_table():
     table_name = ent_table_group.get()
     ent_table_group.delete(0, END)
     if not table_name in ('Projects', 'Tasks', 'Employees'):
-        error = Label(frame_insert, text="No such table")
+        error = Label(frame_group_tasks, text="No such table")
         error.grid(row=1, column=2)
         root.after(1500, lambda: error.destroy())
         return
-    with open(f'./data_from_table_{table_name}', 'w') as file:
+    with open(f'./14_lab/data_from_table_{table_name}', 'w') as file:
         data = select_for_table(table_name)
-        for i in data:
-            file.write(str(i))
+        file.writelines(str(i) + '\n' for i in data)
         done = Label(frame_group_tasks, text="Done")
         done.grid(row=2, column=2)
         root.after(1500, lambda: done.destroy())
@@ -207,6 +207,7 @@ ent_id_3.grid(row=2, column=1)
 Button(frame_insert, text='insert to db', command=insert_tkinter).grid(row=1, column=2)
 
 
+#get data from tables Dedokov loshara
 frame_group_tasks = Frame(root)
 frame_group_tasks.pack(padx=20, pady=20)
 
@@ -215,8 +216,7 @@ Label(frame_group_tasks, text='Table').grid(row=0)
 ent_table_group = Entry(frame_group_tasks)
 ent_table_group.grid(row=0, column=1)
 
-Button(frame_group_tasks, text="Click herer to get tasks", command=get_data_from_table).grid(row=0, column=2)
-
+Button(frame_group_tasks, text="Get table data", command=get_data_from_table).grid(row=0, column=2)
 
 
 root.mainloop()
