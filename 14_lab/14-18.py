@@ -1,6 +1,7 @@
 import sqlite3 as sq
 import csv
 from tkinter import *
+from tkinter import ttk
 
 
 #functions for data base
@@ -59,18 +60,23 @@ def select_for_table(table_name):
 
 #insert function for tkinter GUI
 def insert_tkinter():
-    x = ent_id_1.get()
-    if not x in ('Projects', 'Tasks', 'Employees'):
-        error = Label(frame_insert, text="No such table")
+    x = table_choose_insert.get()
+    if x == '':
+        error = Label(frame_insert, text="Choose table")
         error.grid(row=2, column=2)
         root.after(1500, lambda: error.destroy())
         return
-    y = ent_id_2.get()
-    z = ent_id_3.get()
+    y = ent_id_1.get()
+    z = ent_id_2.get()
+    if y == '' or z == '':
+        error = Label(frame_insert, text="Fill all fields!")
+        error.grid(row=2, column=2)
+        root.after(1500, lambda: error.destroy())
+        return
     insert_to_db(x, y, z)
+    table_choose_insert.delete(0, END)
     ent_id_1.delete(0, END)
     ent_id_2.delete(0, END)
-    ent_id_3.delete(0, END)
     done = Label(frame_insert, text="Done")
     done.grid(row=2, column=2)
     root.after(1500, lambda: done.destroy())
@@ -78,10 +84,10 @@ def insert_tkinter():
 
 #get data from table
 def get_data_from_table():
-    table_name = ent_table_group.get()
-    ent_table_group.delete(0, END)
-    if not table_name in ('Projects', 'Tasks', 'Employees'):
-        error = Label(frame_group_tasks, text="No such table")
+    table_name = table_choose_select.get()
+    table_choose_select.delete(0, END)
+    if table_name == '':
+        error = Label(frame_group_tasks, text="Choose table")
         error.grid(row=1, column=2)
         root.after(1500, lambda: error.destroy())
         return
@@ -91,6 +97,48 @@ def get_data_from_table():
         done = Label(frame_group_tasks, text="Done")
         done.grid(row=2, column=2)
         root.after(1500, lambda: done.destroy())
+    
+
+#get employee's tasks
+def employee_tasks():
+    name = ent_name.get()
+    last_name = ent_last_name.get()
+    data = search_tasks_for_employees(name, last_name)
+    if len(data) == 0:
+        error = Label(frame_employee, text="Employee doesn't exist")
+        error.grid(row=2, column=2)
+        root.after(1500, lambda: error.destroy())
+        return
+    else:
+        with open(f'./14_lab/{last_name}_{name}_tasks', 'w') as file:
+            file.writelines(str(i) + '\n' for i in data)
+            done = Label(frame_employee, text="Done")
+            done.grid(row=2, column=2)
+            root.after(1500, lambda: done.destroy())
+    ent_name.delete(0, END)
+    ent_last_name.delete(0, END)
+
+
+def delete_project():
+    parameter = table_choose_delete.get()
+    x = ent_status.get()
+    db = sq.connect('./14_lab/data_base/14.db')
+    cur = db.cursor()
+    if parameter == '':
+        done = Label(frame_delete, text="Choose parameter")
+        done.grid(row=3, column=1)
+        root.after(1500, lambda: done.destroy())
+        return
+    if parameter == 'Status':
+        cur.execute(f'DELETE FROM Projects WHERE status=\'{x}\'')
+    else:
+        cur.execute(f'DELETE FROM Projects WHERE name=\'{x}\'')
+    db.commit()
+    db.close()
+    done = Label(frame_delete, text="Done")
+    done.grid(row=3, column=1)
+    root.after(1500, lambda: done.destroy())
+
 
 #data base begin
 db = sq.connect('./14_lab/data_base/14.db')
@@ -193,31 +241,80 @@ frame_insert.pack(padx=20, pady=20)
 
 Label(frame_insert, text='Table').grid(row=0)
 Label(frame_insert, text='Name:').grid(row=1)
-Label(frame_insert, text='Status:').grid(row=2)
+Label(frame_insert, text='Status/\nLast name:').grid(row=2)
+
+#selector for insert
+insert_n = StringVar()
+table_choose_insert = ttk.Combobox(frame_insert, textvariable = insert_n)
+table_choose_insert['values'] = ('Projects', 'Employees', 'Tasks')
+table_choose_insert.current()
+table_choose_insert.grid(row=0, column=1)
 
 ent_id_1 = Entry(frame_insert)
-ent_id_1.grid(row=0, column=1)
+ent_id_1.grid(row=1, column=1)
 
 ent_id_2 = Entry(frame_insert)
-ent_id_2.grid(row=1, column=1)
-
-ent_id_3 = Entry(frame_insert)
-ent_id_3.grid(row=2, column=1)
+ent_id_2.grid(row=2, column=1)
 
 Button(frame_insert, text='insert to db', command=insert_tkinter).grid(row=1, column=2)
 
 
-#get data from tables Dedokov loshara
+#get data from tables                             Dedokov loshara
 frame_group_tasks = Frame(root)
 frame_group_tasks.pack(padx=20, pady=20)
 
 Label(frame_group_tasks, text='Table').grid(row=0)
 
-ent_table_group = Entry(frame_group_tasks)
-ent_table_group.grid(row=0, column=1)
+
+#selecter
+table_n = StringVar()
+table_choose_select = ttk.Combobox(frame_group_tasks, textvariable = table_n)
+table_choose_select['values'] = ('Projects', 'Employees', 'Tasks')
+table_choose_select.current()
+table_choose_select.grid(row=0, column=1, padx=10)
 
 Button(frame_group_tasks, text="Get table data", command=get_data_from_table).grid(row=0, column=2)
 
+
+#Select employee by name and last name
+frame_employee = Frame(root)
+frame_employee.pack(padx=20, pady=20)
+
+Label(frame_employee, text='Name:').grid(row=0)
+Label(frame_employee, text='Last name:').grid(row=1)
+
+ent_name = Entry(frame_employee)
+ent_name.grid(row=0, column=1)
+
+ent_last_name = Entry(frame_employee)
+ent_last_name.grid(row=1, column=1)
+
+Button(frame_employee, text="Find employee's tasks", command=employee_tasks).grid(row=0, column=2, rowspan=2)
+
+
+#delete project
+frame_delete = Frame(root)
+frame_delete.pack(padx=20, pady=20)
+
+Label(frame_delete, text='Delete project:').grid(row=0, columnspan=2)
+
+delete_n = StringVar()
+
+table_choose_delete = ttk.Combobox(frame_delete, textvariable = delete_n)
+table_choose_delete['values'] = ('Status', 'Project name')
+table_choose_delete.current()
+table_choose_delete.grid(row=1, columnspan=2, column=0)
+
+ent_status = Entry(frame_delete)
+ent_status.grid(row=2, column=0)
+
+Button(frame_delete, text="Delete project", command=delete_project).grid(row=2, column=1)
+
+
+cur.execute('SELECT * FROM Projects')
+for i in cur.fetchall():
+    print(i)
+print('--------------')
 
 root.mainloop()
 db.close()
