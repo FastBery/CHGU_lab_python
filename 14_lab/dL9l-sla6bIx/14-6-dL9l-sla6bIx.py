@@ -21,8 +21,8 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Vacancies (
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            candidate_id INTEGER NOT NULL,
             vacancy_id INTEGER NOT NULL,
+            candidate_id INTEGER NOT NULL,
             FOREIGN KEY (candidate_id) REFERENCES Candidates (id) ON DELETE CASCADE,
             FOREIGN KEY (vacancy_id) REFERENCES Vacancies (id) ON DELETE CASCADE
             )''')
@@ -33,12 +33,14 @@ db.commit()
 #importing data from files
 datafile = open('./lab_14/applications.csv', encoding="utf8")
 applications = list(csv.DictReader(datafile, delimiter=','))
+print(applications)
 
 datafile = open('./lab_14/candidates.csv', encoding="utf8")
 candidates = list(csv.DictReader(datafile, delimiter=','))
 
 datafile = open('./lab_14/vacancies.csv', encoding="utf8")
 vacancies = list(csv.DictReader(datafile, delimiter=','))
+# print(vacancies)
 
 
 #making tuples from data and then inserting them into tables
@@ -51,7 +53,7 @@ vacancies = list(csv.DictReader(datafile, delimiter=','))
 # cur.executemany('INSERT INTO Vacancies (id, name) VALUES (?, ?)', vacancies_tuples)
 
 # applications_tuples = [ (tuple(i.values())) for i in applications]
-# cur.executemany('INSERT INTO  Applications (id, candidate_id, vacancy_id) VALUES (?, ?, ?)', applications_tuples)
+# cur.executemany('INSERT INTO  Applications (id, vacancy_id, candidate_id) VALUES (?, ?, ?)', applications_tuples)
 
 
 query_1 = """
@@ -94,13 +96,13 @@ for row in result_2:
 query_3 = """
 SELECT 
     Vacancies.name AS vacancy, 
-    COUNT(Applications.id ) AS number_app
+    COUNT(Applications.id) AS num
 FROM 
-    Applications
-JOIN 
-    Vacancies ON Applications.vacancy_id = Vacancies.id
+    Vacancies
+LEFT JOIN 
+    Applications ON Vacancies.id = Applications.vacancy_id
 GROUP BY 
-    Vacancies.id ;
+    Vacancies.id;
 """
 cur.execute(query_3)
 result_3 = cur.fetchall()
