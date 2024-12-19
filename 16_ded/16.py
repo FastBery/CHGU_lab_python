@@ -155,4 +155,7 @@ for i in data:
     else:
         dictionary[month] = i[0]
     
-print(max(dictionary, key=dictionary.get))
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+month = max(dictionary, key=dictionary.get)
+print(months[int(month)])
+print(dictionary[month])
