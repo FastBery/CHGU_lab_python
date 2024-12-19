@@ -1,14 +1,14 @@
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 
-wb = openpyxl.load_workbook('./15_UZI/19.xlsx')
+wb = openpyxl.load_workbook('./19.xlsx')
 
 sheet = wb['Лист1']
 try:
     wb['2']
 except:
     wb.create_sheet('2')
-    wb.save('./15_UZI/19.xlsx')
+    wb.save('./19.xlsx')
 
 sheet2 = wb["2"]
 
@@ -44,5 +44,5 @@ for i in range(1, columns + 1):
                 sheet2.append(array)
                 n += 1
 
-wb.save('./15_UZI/19.xlsx')
+wb.save('./19.xlsx')
 print(n)

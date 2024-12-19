@@ -3,7 +3,7 @@ import openpyxl
 import datetime
 import math
 
-db = sq.connect('./16_ded/data_base/6.db')
+db = sq.connect('./data_base/6.db')
 cur = db.cursor()
 
 cur.execute("PRAGMA foreign_keys=ON;") #making foreign_keys=on
@@ -48,7 +48,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS Operacii (
             FOREIGN KEY (magazin_id) REFERENCES Magazini (id) ON DELETE CASCADE
             )""")
 
-wb = openpyxl.load_workbook('./16_ded/06.xlsx')
+wb = openpyxl.load_workbook('./06.xlsx')
 
 tovari_sheet = wb["Товары"]
 postavki_sheet = wb["Поставки"]
