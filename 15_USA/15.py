@@ -24,16 +24,18 @@ for i in range(1, columns + 1):
     for j in sheet[i][:5]:
         if j.value != None:
             array.append(j.value)
+    sorted_array = sorted(array)
     for j in range(1, len(array)):
-        if array[j] == array[j-1]:
+        if sorted_array[j] == sorted_array[j-1]:
             break
         if j == 4:
-            if (array[0] + array[-1]) < (sum(array[1:3])):
+            if (sorted_array[0] + sorted_array[-1]) < (sum(sorted_array[1:3])):
                 for x in sheet[i]:
                     x.fill = PatternFill("solid", fgColor="DDDDDD")
                     x.border = Border(s,s,s,s) 
-                sheet[f"F{i}"] = array[0] + array[-1]
-                sheet[f"G{i}"] = sum(array[1:3])
+                # print(sorted_array, sorted_array[0] + sorted_array[-1], sum(sorted_array[1:3]))
+                sheet[f"F{i}"] = sorted_array[0] + sorted_array[-1]
+                sheet[f"G{i}"] = sum(sorted_array[1:3])
                 sheet2.append(array)
                 n += 1
 
