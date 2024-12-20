@@ -29,13 +29,13 @@ for i in range(1, columns + 1):
         if sorted_array[j] == sorted_array[j-1]:
             break
         if j == 4:
-            if (sorted_array[0] + sorted_array[-1]) < (sum(sorted_array[1:3])):
+            if (sorted_array[0] + sorted_array[-1]) < (sum(sorted_array[1:4])):
                 for x in sheet[i]:
                     x.fill = PatternFill("solid", fgColor="DDDDDD")
                     x.border = Border(s,s,s,s) 
-                # print(sorted_array, sorted_array[0] + sorted_array[-1], sum(sorted_array[1:3]))
+                print(sorted_array, sorted_array[0] + sorted_array[-1], sum(sorted_array[1:4]))
                 sheet[f"F{i}"] = sorted_array[0] + sorted_array[-1]
-                sheet[f"G{i}"] = sum(sorted_array[1:3])
+                sheet[f"G{i}"] = sum(sorted_array[1:4])
                 sheet2.append(array)
                 n += 1
 
